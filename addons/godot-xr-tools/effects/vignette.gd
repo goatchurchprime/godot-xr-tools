@@ -2,6 +2,9 @@ tool
 class_name XRToolsVignette
 extends Spatial
 
+## This script handles tunnel vision 
+
+
 export var radius = 1.0 setget set_radius
 export var fade = 0.05 setget set_fade
 export var steps = 32 setget set_steps
@@ -10,6 +13,7 @@ export var auto_adjust = true setget set_auto_adjust
 export var auto_inner_radius = 0.35
 export var auto_fade_out_factor = 1.5
 export var auto_fade_delay = 1.0
+export var radius_quantization = 0.1
 export var auto_rotation_limit = 20.0 setget set_auto_rotation_limit
 export var auto_velocity_limit = 10.0
 
@@ -31,6 +35,7 @@ func _update_radius():
 	if radius < 1.0:
 		if material:
 			material.set_shader_param("radius", radius * sqrt(2))
+
 		$Mesh.visible = true
 	else:
 		$Mesh.visible = false
@@ -160,8 +165,11 @@ func _process(delta):
 		var velocity = delta_v.length() / delta
 		target_radius = min(target_radius, 1.0 - (clamp(velocity / auto_velocity_limit, 0.0, 1.0) * (1.0 - auto_inner_radius)))
 
+	if target_radius > 1.0 - radius_quantization:
+		target_radius = 1.0
+
 	# if our radius is small then our current we apply it
-	if target_radius < radius:
+	if target_radius < radius + radius_quantization and target_radius != 1.0:
 		set_radius(target_radius)
 		fade_delay = auto_fade_delay
 	elif fade_delay > 0.0:
