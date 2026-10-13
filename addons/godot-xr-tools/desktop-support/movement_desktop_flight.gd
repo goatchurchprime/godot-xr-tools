@@ -76,15 +76,7 @@ var _flight_button: bool = false
 
 
 ## XRStart Node
-@onready var xr_start_node: Node = XRTools.find_xr_child(
-		XRTools.find_xr_ancestor(
-				self,
-				"*",
-				"XRToolsStaging",
-		),
-		"StartXR",
-		"Node",
-)
+@onready var xr_start_node: XRToolsStartXR = XRToolsStartXR.get_start_xr_node()
 ## XR camera
 @onready var _camera: XRCamera3D = XRHelpers.get_xr_camera(self)
 

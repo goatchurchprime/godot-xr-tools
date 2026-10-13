@@ -58,15 +58,7 @@ var _turn_step: float = 0.0
 
 
 ## XRStart node
-@onready var xr_start_node: XRToolsStartXR = XRTools.find_xr_child(
-		XRTools.find_xr_ancestor(
-				self,
-				"*",
-				"XRToolsStaging",
-		),
-		"StartXR",
-		"Node",
-)
+@onready var xr_start_node: XRToolsStartXR = XRToolsStartXR.get_start_xr_node()
 
 
 func _process(_delta: float) -> void:
